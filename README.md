@@ -79,7 +79,7 @@ Ensure the following files are in the same directory:
 | --------------- | ------------------------------------------ |
 | Mohamed Nasser  | Project leader, system design, integration |
 | Ibrahim Mohamed | Handled deposit/withdraw functions         |
-| Kareem Kotp     | Responsible for customer data structure    |
+| Kareem Kotb     | Responsible for customer data structure    |
 | Hagar Marzouk   | File I/O and persistence                   |
 
 ---
@@ -131,4 +131,4 @@ Customer added successfully.
 
 ---
 
-Made with 💻 by IEEE-RAS Embedded Project 1 Team.
+Made for IEEE-RAS Embedded Project 1 by>>> NODE1 💪🏻.
