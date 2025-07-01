@@ -218,13 +218,13 @@ void transfer_money(Customer customers[], int count) {
 
     // If IDs are invalid, show message and stop
     if (from == -1 || to == -1) {
-        printf("Invalid IDs!\n");
+        printf("\nInvalid IDs!\n");
         return;
     }
 
     // If not enough balance, show message and stop
     if (customers[from].balance < amount) {
-        printf("Insufficient funds!\n");
+        printf("\nInsufficient funds!\n");
         return;
     }
 
@@ -268,7 +268,7 @@ void deposit(Customer customers[], int count) {
 
     // Check if amount is negative
     if (amount < 0) {
-        printf("Invalid amount.\n"); // Show error if amount is invalid
+        printf("Invalid amount. The amount should be positive\n"); // Show error if amount is invalid
         return; // Stop function
     }
 
@@ -300,7 +300,7 @@ void withdraw(Customer customers[], int count) {
 
     // Check if amount is valid (must be greater than 0)
     if (amount <= 0) {
-        printf("Invalid amount!\n"); // Show error if invalid
+        printf("Invalid amount! The amount should be positive\n"); // Show error if invalid
         return; // Stop function
     }
 
