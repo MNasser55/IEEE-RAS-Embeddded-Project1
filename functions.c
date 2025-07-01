@@ -82,7 +82,7 @@ void create_customer(Customer customers[], int *count) {
     while (1) {
 
         // بناخد ID من اليوزر باستخدام فانكشن بتضمن إنه صحيح
-        ID = safeInputInt("Enter ID: ");
+        ID = safeInputInt("\nEnter ID: ");
 
         int exists = 0;
         // بندور هل الـ ID ده موجود قبل كده ولا لأ
@@ -138,7 +138,7 @@ void create_customer(Customer customers[], int *count) {
 void edit_customer(Customer customers[], int count) {
     // دالة لتعديل بيانات عميل موجود
     int id, found = 0;
-    id = safeInputInt("Enter ID to edit: ");
+    id = safeInputInt("\nEnter ID to edit: ");
     for (int i = 0; i < count; i++) {
         if (customers[i].id == id) {
             // لو لقيناه، بنطلب الاسم الجديد والتليفون
@@ -158,11 +158,11 @@ void edit_customer(Customer customers[], int count) {
 void view_customer(Customer customers[], int count) {
     // دالة لعرض بيانات عميل معين
     int id, found = 0;
-    id = safeInputInt("Enter ID to view: ");
+    id = safeInputInt("\nEnter ID to view: ");
     for (int i = 0; i < count; i++) {
         if (customers[i].id == id) {
             // لو لقيناه بنطبع البيانات بتاعته
-            printf("ID: %d\nName: %s\nPhone: %s\nBalance: %.2f\n",
+            printf("\nID: %d\nName: %s\nPhone: %s\nBalance: %.2f\n",
                    customers[i].id, customers[i].name,
                    customers[i].phone, customers[i].balance);
             found = 1;
@@ -176,7 +176,7 @@ void view_customer(Customer customers[], int count) {
 void delete_customer(Customer customers[], int *count) {
     // دالة لحذف عميل من الليستة
     int id, found = 0;
-    id = safeInputInt("Enter ID to delete: ");
+    id = safeInputInt("\nEnter ID to delete: ");
     for (int i = 0; i < *count; i++) {
         if (customers[i].id == id) {
             // لو لقيناه، بنحرك باقي العملاء فوقه علشان نحذف
@@ -185,13 +185,13 @@ void delete_customer(Customer customers[], int *count) {
             }
             // نقلل العداد بعد الحذف
             (*count)--;
-            printf("Customer deleted.\n");
+            printf("\nCustomer deleted.\n");
             found = 1;
             break;
         }
     }
     // لو ملقيناش العميل
-    if (!found) printf("Customer not found!\n");
+    if (!found) printf("\nCustomer not found!\n");
 }
 
                     // === Added by Ibrahim ===
@@ -202,7 +202,7 @@ void transfer_money(Customer customers[], int count) {
     float amount;       // Declare amount to transfer
 
     // Get sender ID using safe input
-    id_from = safeInputInt("Sender ID: ");
+    id_from = safeInputInt("\nSender ID: ");
     // Get receiver ID using safe input
     id_to = safeInputInt("Receiver ID: ");
     // Get transfer amount using safe input
@@ -230,7 +230,7 @@ void transfer_money(Customer customers[], int count) {
 
 
     // Ask for confirmation — now shows ID and name for both
-    printf("Are you sure you want to transfer %.2f L.E from ID: %d (%s) to ID: %d (%s)? (Y/N): ",
+    printf("\nAre you sure you want to transfer %.2f L.E from ID: %d (%s) to ID: %d (%s)? (Y/N): ",
            amount,
            id_from, customers[from].name, // Show sender name
            id_to, customers[to].name);    // Show receiver name
@@ -262,7 +262,7 @@ void deposit(Customer customers[], int count) {
     float amount;
 
     // Get customer ID using safe input
-    id = safeInputInt("Enter ID: ");
+    id = safeInputInt("\nEnter ID: ");
     // Get amount using safe input
     amount = safeInputFloat("Enter amount: ");
 
@@ -294,7 +294,7 @@ void withdraw(Customer customers[], int count) {
     float amount;
 
     // Get customer ID using safe input
-    id = safeInputInt("Enter ID: ");
+    id = safeInputInt("\nEnter ID: ");
     // Get amount to withdraw using safe input
     amount = safeInputFloat("Enter amount: ");
 

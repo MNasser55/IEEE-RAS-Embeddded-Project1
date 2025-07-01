@@ -1,5 +1,5 @@
 
-// === FUNCTIONS.H ===
+// === FUNCTIONS.H === By Nasser
 // Struct and function prototypes with documentation
 
 #ifndef FUNCTIONS_H
