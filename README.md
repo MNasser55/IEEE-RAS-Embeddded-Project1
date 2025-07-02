@@ -1,94 +1,97 @@
-# 💼 Bank Management System – C Project
+# Bank Customer Management System
 
-نظام إدارة بنك متكامل بلغة **C** يعمل من خلال الكونسول (Console-Based)، يتيح التعامل مع بيانات العملاء بشكل آمن ومنظم. يشمل النظام إنشاء حسابات، عرض وتعديل بيانات العملاء، إيداع وسحب الأموال، تحويل رصيد بين الحسابات، حذف الحسابات – وكل ده **مع التحقق من كلمة المرور (Password)** في كل العمليات الحساسة.
-
----
-
-## 🔧 وظائف النظام الأساسية
-
-| الوظيفة                  | الوصف                                                                 |
-|--------------------------|------------------------------------------------------------------------|
-| ✅ **Create Account**     | إنشاء حساب جديد باستخدام ID، الاسم، الرقم السري (4 أرقام)، التليفون، والرصيد الابتدائي. |
-| ✅ **Edit Customer**      | تعديل بيانات العميل (الاسم، التليفون) بعد إدخال الرقم السري.                        |
-| ✅ **View Customer**      | عرض بيانات العميل (ID، الاسم، التليفون، الرصيد) بعد إدخال الرقم السري.              |
-| ✅ **Delete Customer**    | حذف حساب العميل نهائيًا بعد التأكد من الرقم السري.                              |
-| ✅ **Deposit**            | إيداع مبلغ في الحساب بعد إدخال ID والرقم السري.                              |
-| ✅ **Withdraw**           | سحب مبلغ من الحساب بعد إدخال ID والرقم السري، مع التحقق من كفاية الرصيد.         |
-| ✅ **Transfer Money**     | تحويل مبلغ من حساب إلى آخر بعد إدخال الرقم السري للمرسل، مع التأكد من كفاية الرصيد. |
-| ✅ **Input Validation**   | التحقق من إدخال الأرقام فقط في الـ ID والمبالغ لتفادي الأخطاء.                   |
+🧾 **Project Overview**  
+A simple C-based command-line banking system that manages customer records using a static array of structures. The program allows adding, editing, deleting, and viewing customers, along with essential banking operations such as money transfer, deposit, and withdrawal. All data is stored persistently in a text file (`customers.txt`).
 
 ---
 
-## 🔐 الحماية والأمان
-
-- جميع العمليات المهمة تتطلب إدخال كلمة مرور (Password) مكونة من **4 أرقام**.
-- كلمة المرور تُخزن على شكل **char array** (وليس كـ int) لتفادي الثغرات الخاصة بالأرقام.
-- إدخال كلمة المرور يتم التحقق منه باستخدام `strcmp()` بدلاً من المقارنة الرقمية.
-- عند 3 محاولات خاطئة يمكن إلغاء العملية (يُسأل المستخدم هل يرغب في المحاولة مجددًا).
-
----
-
-## 📂 ملفات المشروع
-
-| الملف             | المحتوى                                                               |
-|------------------|------------------------------------------------------------------------|
-| `main.c`         | يحتوي على القائمة الرئيسية (Main Menu) والدوال الخاصة بالتنقل بين الوظائف. |
-| `functions.c`    | يحتوي على جميع دوال العمليات (Create, Edit, Delete, Deposit, Withdraw, etc.). |
-| `functions.h`    | يحتوي على تعريف الهيكل `Customer` وتعريف الدوال المستخدمه في الكود.           |
-| `customers.txt`  | ملف خارجي لتخزين بيانات العملاء. يتم تحميله وتحديثه تلقائيًا عند أي تعديل.   |
-
----
-
-## 📝 شكل البيانات المخزنة
-
-البيانات تحفظ داخل ملف `customers.txt` بهذا الشكل:
-
+## 📁 Project Structure
 ```
-<ID> <Password> <Name> <Phone> <Balance>
-```
-
-مثال:
-
-```
-1001 1234 Ahmed 01012345678 5000.00  
-1002 4321 Salma 01198765432 2500.75
+├── main.c          // Main menu logic and user interface
+├── functions.c     // Business logic and operations
+├── functions.h     // Structs and function declarations
+├── customers.txt   // Data storage file (generated automatically)
 ```
 
 ---
 
-## 🛠️ كيفية التشغيل (Compile)
+## 🔧 Features
+- Add a new customer with password protection  
+- Edit and view customer details after verifying password  
+- Delete customers after verifying password  
+- Deposit & withdraw money with validation and password checks  
+- Transfer money between customers with confirmation step  
+- All changes saved immediately to `customers.txt`  
+- Input validation using custom `safeInputInt` and `safeInputFloat`  
+- Static array for customer storage (up to 100 customers)  
 
+---
+
+## 🧠 Data Model
+```c
+typedef struct {
+    int id;
+    char password[5];
+    char name[100];
+    char phone[20];
+    float balance;
+} Customer;
+```
+
+---
+
+## ▶️ How to Compile and Run
+**Compile**
 ```bash
 gcc main.c functions.c -o bank_system
-./bank_system
 ```
 
-أو على ويندوز باستخدام MinGW:
-
+**Run**
 ```bash
-gcc main.c functions.c -o bank_system.exe
-bank_system.exe
+./bank_system   # or .\bank_system.exe on Windows
 ```
 
 ---
 
-## 👥 فريق العمل
-
-- 👩‍💻 **Hagar Marzouk** – تنظيم الكود والهيكل العام للمشروع
-- 🧠 **Nasser** – تنفيذ دوال التحقق الآمن، نظام الإدخال، ومعالجة كلمات السر
-- 🛠️ **Kareem Kotb** – تصميم نظام إضافة وتعديل العملاء
-- 💸 **Ibrahim** – تنفيذ دوال التحويل، الإيداع والسحب
+## 📌 Security Features
+- Password verification for all sensitive operations  
+- Prompts for retry or cancellation upon incorrect password  
+- Uses safe input functions to handle invalid user input  
 
 ---
 
-## 📌 ملاحظات هامة
+## 👥 Team Members
 
-- ❗ حاليًا إدخال الباسورد يتم بشكل مرئي (مش مخفي). يمكن لاحقًا تطبيق إخفاء الإدخال (مثلاً باستخدام `getch()` في Windows).
-- ⚠️ لا يوجد تشفير فعلي في الملف النصي. لأغراض تعليمية فقط. لو المشروع للتطبيق الحقيقي، يُفضل تشفير البيانات.
-- 📁 تأكد أن ملف `customers.txt` موجود في نفس مسار التشغيل.
+| Name           | Task Description                         |
+|----------------|-------------------------------------------|
+| Mohamed Nasser | Team Leader, system integration          |
+| Kareem         | Deposit / Withdraw functionality         |
+| Ibrahim        | Transfer & security logic                |
+| Hagar Marzouk  | Data loading/saving & structure          |
 
 ---
 
-## 🏫 جهة المشروع
+## 🛠 Technologies Used
+- C Language (GCC Compiler)  
+- Git & GitHub for collaboration  
+- Static array structure (no dynamic allocation)  
+- Windows Command Line / Linux Terminal  
 
-> هذا المشروع تم تطويره ضمن كورس **الأنظمة المدمجة Embedded Systems** بكلية الهندسة – جامعة الزقازيق، عام 2025.
+---
+
+## 💡 What We Learned
+- Modular programming in C  
+- File I/O handling (save/load)  
+- Input validation & buffer clearing  
+- Team collaboration using Git branches & pull requests  
+
+---
+
+## 📬 Notes
+- The system uses a static array with a maximum of 100 customers.  
+- File `customers.txt` is automatically created if not found.  
+- All operations instantly update the stored file.  
+
+---
+
+©️ Made for IEEE-RAS Embedded Project 1 by>>> NODE1 💪🏻.
