@@ -1,134 +1,94 @@
-# BANK CUSTOMER MANAGEMENT SYSTEM
+# 💼 Bank Management System – C Project
 
-## 📌 Project Overview
-
-This project is a **Bank Customer Management System** written in C, built as part of the IEEE-RAS Embedded Project 1. The system manages customer data, including creation, editing, deletion, money transfer, deposits, and withdrawals.
-
-It is a **menu-driven console application** that stores and retrieves data from a text file (`customers.txt`) using structured programming and modular design.
+نظام إدارة بنك متكامل بلغة **C** يعمل من خلال الكونسول (Console-Based)، يتيح التعامل مع بيانات العملاء بشكل آمن ومنظم. يشمل النظام إنشاء حسابات، عرض وتعديل بيانات العملاء، إيداع وسحب الأموال، تحويل رصيد بين الحسابات، حذف الحسابات – وكل ده **مع التحقق من كلمة المرور (Password)** في كل العمليات الحساسة.
 
 ---
 
-## ⚙️ How to Run the Project
+## 🔧 وظائف النظام الأساسية
 
-### 1. Clone the Repository
+| الوظيفة                  | الوصف                                                                 |
+|--------------------------|------------------------------------------------------------------------|
+| ✅ **Create Account**     | إنشاء حساب جديد باستخدام ID، الاسم، الرقم السري (4 أرقام)، التليفون، والرصيد الابتدائي. |
+| ✅ **Edit Customer**      | تعديل بيانات العميل (الاسم، التليفون) بعد إدخال الرقم السري.                        |
+| ✅ **View Customer**      | عرض بيانات العميل (ID، الاسم، التليفون، الرصيد) بعد إدخال الرقم السري.              |
+| ✅ **Delete Customer**    | حذف حساب العميل نهائيًا بعد التأكد من الرقم السري.                              |
+| ✅ **Deposit**            | إيداع مبلغ في الحساب بعد إدخال ID والرقم السري.                              |
+| ✅ **Withdraw**           | سحب مبلغ من الحساب بعد إدخال ID والرقم السري، مع التحقق من كفاية الرصيد.         |
+| ✅ **Transfer Money**     | تحويل مبلغ من حساب إلى آخر بعد إدخال الرقم السري للمرسل، مع التأكد من كفاية الرصيد. |
+| ✅ **Input Validation**   | التحقق من إدخال الأرقام فقط في الـ ID والمبالغ لتفادي الأخطاء.                   |
 
-```bash
-git clone https://github.com/MNasser55/IEEE-RAS-Embeddded-Project1.git
-cd IEEE-RAS-Embeddded-Project1
+---
+
+## 🔐 الحماية والأمان
+
+- جميع العمليات المهمة تتطلب إدخال كلمة مرور (Password) مكونة من **4 أرقام**.
+- كلمة المرور تُخزن على شكل **char array** (وليس كـ int) لتفادي الثغرات الخاصة بالأرقام.
+- إدخال كلمة المرور يتم التحقق منه باستخدام `strcmp()` بدلاً من المقارنة الرقمية.
+- عند 3 محاولات خاطئة يمكن إلغاء العملية (يُسأل المستخدم هل يرغب في المحاولة مجددًا).
+
+---
+
+## 📂 ملفات المشروع
+
+| الملف             | المحتوى                                                               |
+|------------------|------------------------------------------------------------------------|
+| `main.c`         | يحتوي على القائمة الرئيسية (Main Menu) والدوال الخاصة بالتنقل بين الوظائف. |
+| `functions.c`    | يحتوي على جميع دوال العمليات (Create, Edit, Delete, Deposit, Withdraw, etc.). |
+| `functions.h`    | يحتوي على تعريف الهيكل `Customer` وتعريف الدوال المستخدمه في الكود.           |
+| `customers.txt`  | ملف خارجي لتخزين بيانات العملاء. يتم تحميله وتحديثه تلقائيًا عند أي تعديل.   |
+
+---
+
+## 📝 شكل البيانات المخزنة
+
+البيانات تحفظ داخل ملف `customers.txt` بهذا الشكل:
+
+```
+<ID> <Password> <Name> <Phone> <Balance>
 ```
 
-### 2. Compile the Project
+مثال:
+
+```
+1001 1234 Ahmed 01012345678 5000.00  
+1002 4321 Salma 01198765432 2500.75
+```
+
+---
+
+## 🛠️ كيفية التشغيل (Compile)
 
 ```bash
 gcc main.c functions.c -o bank_system
-```
-
-### 3. Run the Program
-
-```bash
 ./bank_system
 ```
 
-### 4. Files Required
+أو على ويندوز باستخدام MinGW:
 
-Ensure the following files are in the same directory:
-
-* `main.c`
-* `functions.c`
-* `functions.h`
-* `customers.txt` (will be created if not present)
-
----
-
-## 🧠 Project Structure
-
-### `main.c`
-
-* Displays the menu.
-* Calls appropriate functions based on user input.
-* Manages user interaction loop.
-
-### `functions.c`
-
-* Contains all business logic and file operations.
-* Main functions include:
-
-  * `create_customer`
-  * `edit_customer`
-  * `view_customer`
-  * `delete_customer`
-  * `transfer_money`
-  * `deposit`
-  * `withdraw`
-  * `load_data`
-  * `save_data`
-
-### `functions.h`
-
-* Contains structure definitions and function prototypes.
-
-### `customers.txt`
-
-* Data file storing customer information persistently.
-
----
-
-## 👥 Team Members and Tasks
-
-| Name            | Task Description                           |
-| --------------- | ------------------------------------------ |
-| Mohamed Nasser  | Project leader, system design, integration |
-| Ibrahim Mohamed | Handled deposit/withdraw functions         |
-| Kareem Kotb     | Responsible for customer data structure    |
-| Hagar Marzouk   | File I/O and persistence                   |
-
----
-
-## 💡 Features Implemented
-
-* Add/Edit/Delete customers
-* View customer by ID
-* Transfer money between accounts
-* Deposit and withdraw money with validation
-* Save and load data from text file
-* Safe input handling to prevent crashes
-
----
-
-## 💻 Input Example
-
-```
-=== BANK CUSTOMER MANAGEMENT SYSTEM ===
-1. Add Customer
-2. Edit Customer
-...
-Enter your choice: 1
-Enter ID: 1001
-Enter Name: Ahmed Ali
-Enter Phone: 01012345678
-Enter Initial Balance: 5000
-Customer added successfully.
+```bash
+gcc main.c functions.c -o bank_system.exe
+bank_system.exe
 ```
 
 ---
 
-## 📁 GitHub Collaboration Process
+## 👥 فريق العمل
 
-* Each member worked on a separate **branch**.
-* Pull Requests (PRs) were used to merge into `main`.
-* All PRs reviewed by team leader before merging.
-* Git history shows active contributions per member.
-
----
-
-## 🏁 Final Notes
-
-* The code is well-organized with clean structure and comments.
-* Input validation functions were used to avoid invalid entries.
-* The system is expandable for future improvements (e.g., password security, search by name).
-
-> "This project demonstrates our ability to work in teams using GitHub, write modular C code, and build a reliable user-facing application."
+- 👩‍💻 **Hagar Marzouk** – تنظيم الكود والهيكل العام للمشروع
+- 🧠 **Nasser** – تنفيذ دوال التحقق الآمن، نظام الإدخال، ومعالجة كلمات السر
+- 🛠️ **Kareem Kotb** – تصميم نظام إضافة وتعديل العملاء
+- 💸 **Ibrahim** – تنفيذ دوال التحويل، الإيداع والسحب
 
 ---
 
-Made for IEEE-RAS Embedded Project 1 by>>> NODE1 💪🏻.
+## 📌 ملاحظات هامة
+
+- ❗ حاليًا إدخال الباسورد يتم بشكل مرئي (مش مخفي). يمكن لاحقًا تطبيق إخفاء الإدخال (مثلاً باستخدام `getch()` في Windows).
+- ⚠️ لا يوجد تشفير فعلي في الملف النصي. لأغراض تعليمية فقط. لو المشروع للتطبيق الحقيقي، يُفضل تشفير البيانات.
+- 📁 تأكد أن ملف `customers.txt` موجود في نفس مسار التشغيل.
+
+---
+
+## 🏫 جهة المشروع
+
+> هذا المشروع تم تطويره ضمن كورس **الأنظمة المدمجة Embedded Systems** بكلية الهندسة – جامعة الزقازيق، عام 2025.
