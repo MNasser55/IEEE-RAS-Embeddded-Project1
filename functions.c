@@ -11,8 +11,9 @@ void load_data(Customer customers[], int *count) { // function to load customer 
 
     if (fp == NULL) return; // If the file doesn't exist, exit the function
 
-    while (fscanf(fp, "%d %s %s %f", // Read each customer's data from the file until end-of-file
-                  &customers[*count].id,       // Read customer ID
+    while (fscanf(fp, "%d %4s %s %s %f", // Read each customer's data from the file until end-of-file
+                  &customers[*count].id,
+                  &customers[*count].password,       // Read customer ID
                   customers[*count].name,      // Read customer name
                   customers[*count].phone,     // Read customer phone number
                   &customers[*count].balance)  // Read customer balance
@@ -29,8 +30,9 @@ void save_data(Customer customers[], int count) {   // function to save all cust
     if(fp == NULL) return;  // If the file cannot be opened, exit the function
 
     for (int i = 0; i < count; i++) {  // Loop through all customers and write their data to the file
-        fprintf(fp, "%d %s %s %.2f\n",       // Write customer data in one line
+        fprintf(fp, "%d %4s %s %s %.2f\n",       // Write customer data in one line
                 customers[i].id,            // Write customer ID
+                customers[i].password,      //write the password
                 customers[i].name,          // Write customer name
                 customers[i].phone,         // Write customer phone number
                 customers[i].balance);      // Write customer balance
@@ -84,11 +86,8 @@ void create_customer(Customer customers[], int *count) {
         // بناخد ID من اليوزر باستخدام فانكشن بتضمن إنه صحيح
         ID = safeInputInt("\nEnter ID: ");
 
-        int exists = 0;
         // بندور هل الـ ID ده موجود قبل كده ولا لأ
-        for (int i = 0; i < *count; i++) {
-            if (ID == customers[i].id) {
-                exists = 1;
+        if (findCustomerIndex(customers, *count, ID) == -1) break;
                 char choice;
                 // لو موجود بنسأله عايز يعدل بياناته بدل ما يضيفه تاني؟
                 printf("This ID already exists.\nDo you want to edit this customer instead? (Y/N): ");
@@ -99,22 +98,19 @@ void create_customer(Customer customers[], int *count) {
                     // لو قال اه بنديله فانكشن التعديل ونرجع
                     edit_customer(customers, *count);
                     return;
-                } else {
-                    // لو قال لأ، بنطلب ID جديد
-                    printf("Please enter a different ID.\n");
-                    break;
-                }
+
             }
         }
-        // لو الـ ID مش مكرر بنخرج من اللوب ونكمل
-        if (!exists) break;
-    }
+
 
     // بنخزن الـ ID اللي ادخله المستخدم
     customers[*count].id = ID;
     printf("Enter Name: ");
-    scanf("%s", customers[*count].name);  // بنقرأ الاسم
-
+    scanf("%s", customers[*count].name); // بنقرأ الاسم
+    while ((getchar()) != '\n');
+    printf("Enter Password (4 digits): ");
+    scanf("%4s", customers[*count].password);
+    while ((getchar()) != '\n');//نقري الباسورد
     printf("Enter Phone: ");
     scanf("%s", customers[*count].phone);  // بنقرأ رقم التليفون
 
@@ -137,61 +133,96 @@ void create_customer(Customer customers[], int *count) {
 
 void edit_customer(Customer customers[], int count) {
     // دالة لتعديل بيانات عميل موجود
-    int id, found = 0;
-    id = safeInputInt("\nEnter ID to edit: ");
-    for (int i = 0; i < count; i++) {
-        if (customers[i].id == id) {
-            // لو لقيناه، بنطلب الاسم الجديد والتليفون
-            printf("Enter New Name: ");
-            scanf("%s", customers[i].name);
-            printf("Enter New Phone: ");
-            scanf("%s", customers[i].phone);
-            printf("Updated successfully.\n");
-            found = 1;
-            break;
-        }
+    int  id = safeInputInt("\nEnter ID to edit: ");
+    int index = findCustomerIndex(customers, count, id);
+
+    if (index == -1) {
+        printf("Customer not found!\n");
+        return;
     }
-    // لو ملقيناش الـ ID بنقول للمستخدم
-    if (!found) printf("Customer not found!\n");
+
+        while (1) {
+       char password[5];
+    printf("Enter your password: ");
+    scanf("%4s", password);
+    while ((getchar()) != '\n');
+    if (strcmp(customers[index].password, password) == 0) break;
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
+    printf("Enter New Name: ");
+    scanf("%s", customers[index].name);
+    printf("Enter New Phone: ");
+    scanf("%s", customers[index].phone);
+    printf("Customer updated successfully.\n");
 }
 
 void view_customer(Customer customers[], int count) {
     // دالة لعرض بيانات عميل معين
-    int id, found = 0;
-    id = safeInputInt("\nEnter ID to view: ");
-    for (int i = 0; i < count; i++) {
-        if (customers[i].id == id) {
-            // لو لقيناه بنطبع البيانات بتاعته
-            printf("\nID: %d\nName: %s\nPhone: %s\nBalance: %.2f\n",
-                   customers[i].id, customers[i].name,
-                   customers[i].phone, customers[i].balance);
-            found = 1;
-            break;
-        }
+    int id = safeInputInt("\nEnter ID to view: ");
+     int index = findCustomerIndex(customers, count, id);
+      if (index == -1) {
+        printf("Customer not found!\n");// لو ملقيناش العميل
+        return;
     }
-    // لو ملقيناش العميل
-    if (!found) printf("Customer not found!\n");
+
+ while (1) {
+        char password[5];
+        printf("Enter your password: ");
+        scanf("%4s", password);
+        while ((getchar()) != '\n');
+if (strcmp(customers[index].password, password) == 0) break;
+
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
+    printf("\nID: %d\nName: %s\nPhone: %s\nBalance: %.2f\n",
+           customers[index].id,
+           customers[index].name,
+           customers[index].phone,
+           customers[index].balance);
 }
+
 
 void delete_customer(Customer customers[], int *count) {
     // دالة لحذف عميل من الليستة
-    int id, found = 0;
-    id = safeInputInt("\nEnter ID to delete: ");
-    for (int i = 0; i < *count; i++) {
-        if (customers[i].id == id) {
-            // لو لقيناه، بنحرك باقي العملاء فوقه علشان نحذف
-            for (int j = i; j < (*count) - 1; j++) {
-                customers[j] = customers[j + 1];
-            }
-            // نقلل العداد بعد الحذف
-            (*count)--;
-            printf("\nCustomer deleted.\n");
-            found = 1;
-            break;
-        }
+    int id = safeInputInt("\nEnter ID to delete: ");
+    int index = findCustomerIndex(customers, *count, id);
+
+     if (index == -1) {
+        printf("Customer not found!\n");
+        return;
     }
-    // لو ملقيناش العميل
-    if (!found) printf("\nCustomer not found!\n");
+
+         while (1) {
+       char password[5];
+       printf("Enter your password: ");
+       scanf("%4s", password);
+       while ((getchar()) != '\n');
+       if (strcmp(customers[index].password, password) == 0) break;
+
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
+    // تنفيذ الحذف
+    for (int j = index; j < (*count) - 1; j++) {
+        customers[j] = customers[j + 1];
+    }
+
+    (*count)--; // تقليل عدد العملاء
+    printf("Customer deleted successfully.\n");
 }
 
                     // === Added by Ibrahim ===
@@ -208,13 +239,8 @@ void transfer_money(Customer customers[], int count) {
     // Get transfer amount using safe input
     amount = safeInputFloat("Amount: ");
 
-    int from = -1, to = -1; // Initialize indexes for sender and receiver
-
-    // Find sender and receiver in array
-    for (int i = 0; i < count; i++) {
-        if (customers[i].id == id_from) from = i; // Save sender index
-        if (customers[i].id == id_to) to = i;     // Save receiver index
-    }
+   int from = findCustomerIndex(customers, count, id_from);
+    int to = findCustomerIndex(customers, count, id_to);
 
     // If IDs are invalid, show message and stop
     if (from == -1 || to == -1) {
@@ -222,104 +248,118 @@ void transfer_money(Customer customers[], int count) {
         return;
     }
 
-    // If not enough balance, show message and stop
+    while (1) {
+        char password[5];
+        printf("Enter your password: ");
+        scanf("%4s", password);
+        while ((getchar()) != '\n');
+if (strcmp(customers[id_from].password, password) == 0) break;
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
     if (customers[from].balance < amount) {
-        printf("\nInsufficient funds!\n");
+        printf("Insufficient funds!\n");
         return;
     }
 
-
-    // Ask for confirmation — now shows ID and name for both
     printf("\nAre you sure you want to transfer %.2f L.E from ID: %d (%s) to ID: %d (%s)? (Y/N): ",
            amount,
-           id_from, customers[from].name, // Show sender name
-           id_to, customers[to].name);    // Show receiver name
+           id_from, customers[from].name,
+           id_to, customers[to].name);
 
-    char confirm = 'N'; // Initialize confirmation char
-    scanf("%c", &confirm); // Read confirmation
-
-    // If user cancels with anything other than Y/y
+    char confirm;
+    scanf(" %c", &confirm);
+    while (getchar() != '\n');
     if (confirm != 'Y' && confirm != 'y') {
         printf("Transfer cancelled.\n");
         return;
     }
 
-    // Subtract from sender's balance
     customers[from].balance -= amount;
-    // Add to receiver's balance
     customers[to].balance += amount;
-
-    // Show success message
     printf("Transfer done successfully!\n");
 }
 
 
 //deposit
 void deposit(Customer customers[], int count) {
-    // Declare variable for customer ID
-    int id;
-    // Declare variable for amount to deposit
-    float amount;
+    // Declare variable for customer ID and Get customer ID using safe input
+    int id = safeInputInt("\nEnter ID: ");
+    int index = findCustomerIndex(customers, count, id); //try to find the user
 
-    // Get customer ID using safe input
-    id = safeInputInt("\nEnter ID: ");
-    // Get amount using safe input
-    amount = safeInputFloat("Enter amount: ");
 
-    // Check if amount is negative
+if (index == -1) {
+        printf("Customer not found!\n");
+        return;
+    }
+
+    while (1) {
+        char password[5];
+        printf("Enter your password: ");
+        scanf("%4s", password);
+        while ((getchar()) != '\n');
+if (strcmp(customers[index].password, password) == 0) break; //get the password
+
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
+    float amount = safeInputFloat("Enter amount to deposit: "); // Get amount using safe input
     if (amount < 0) {
-        printf("Invalid amount. The amount should be positive\n"); // Show error if amount is invalid
-        return; // Stop function
+        printf("Invalid amount!\n");// Check if amount is valid (must be greater than 0)
+        return;
     }
 
-    // Loop through all customers to find ID
-    for (int i = 0; i < count; i++) {
-        if (customers[i].id == id) {
-            customers[i].balance += amount; // Add amount to balance
-            printf("Deposit done.\n"); // Show success message
-            return; // Stop function after deposit
-        }
-    }
-
-    // If ID not found
-    printf("Customer not found!\n");
+    customers[index].balance += amount;
+    printf("Deposit successful! New balance: %.2f\n", customers[index].balance);
 }
+
 
 
 //withdraw
 void withdraw(Customer customers[], int count) {
     // Declare variable for customer ID
-    int id;
-    // Declare variable for amount to withdraw
-    float amount;
+    int id = safeInputInt("\nEnter ID: ");
+    int index = findCustomerIndex(customers, count, id);//try to find the user
 
-    // Get customer ID using safe input
-    id = safeInputInt("\nEnter ID: ");
-    // Get amount to withdraw using safe input
-    amount = safeInputFloat("Enter amount: ");
+if (index == -1) {
+        printf("Customer not found!\n");
+        return;
+    }
 
-    // Check if amount is valid (must be greater than 0)
+
+     while (1) {
+        char password[5];
+        printf("Enter your password: ");
+        scanf("%4s", password);
+        while ((getchar()) != '\n');
+if (strcmp(customers[index].password, password) == 0) break;
+        char retry;
+        printf("Wrong password! Try again? (Y/N): ");
+        scanf(" %c", &retry);
+        while (getchar() != '\n');
+        if (retry != 'Y' && retry != 'y') return;
+    }
+
+    float amount = safeInputFloat("Enter amount to withdraw: ");    // Get amount to withdraw using safe input
     if (amount <= 0) {
-        printf("Invalid amount! The amount should be positive\n"); // Show error if invalid
-        return; // Stop function
+        printf("Invalid amount!\n");// Check if amount is valid (must be greater than 0)
+        return;
     }
 
-    // Loop through all customers to find matching ID
-    for (int i = 0; i < count; i++) {
-        if (customers[i].id == id) {
-            // Check if customer has enough balance
-            if (customers[i].balance >= amount) {
-                customers[i].balance -= amount; // Subtract amount
-                printf("Withdraw done.\n"); // Show success message
-            } else {
-                printf("Insufficient funds.\n"); // Not enough money
-            }
-            return; // Stop after processing
-        }
+    if (customers[index].balance >= amount) {
+        customers[index].balance -= amount;
+        printf("Withdraw successful! Remaining balance: %.2f\n", customers[index].balance);
+    } else {
+        printf("Insufficient funds.\n");
     }
-
-    // If customer ID not found
-    printf("Customer not found!\n");
 }
 
 // Function to clear the screen using system command
@@ -327,3 +367,10 @@ void clearScreen() {
     system("cls"); // Clear console screen on Windows
 }
 
+ // added by Nasser
+int findCustomerIndex(Customer customers[], int count, int id) {
+    for (int i = 0; i < count; i++) {
+        if (customers[i].id == id) return i;
+    }
+    return -1;
+}
