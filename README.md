@@ -94,4 +94,4 @@ gcc main.c functions.c -o bank_system
 
 ---
 
-©️ IEEE-RAS Embedded Project 1 Team – 2025
+©️ Made for IEEE-RAS Embedded Project 1 by>>> NODE1 💪🏻.
