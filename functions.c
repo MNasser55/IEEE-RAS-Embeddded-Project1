@@ -253,7 +253,7 @@ void transfer_money(Customer customers[], int count) {
         printf("Enter your password: ");
         scanf("%4s", password);
         while ((getchar()) != '\n');
-if (strcmp(customers[id_from].password, password) == 0) break;
+if (strcmp(customers[from].password, password) == 0) break;
         char retry;
         printf("Wrong password! Try again? (Y/N): ");
         scanf(" %c", &retry);
